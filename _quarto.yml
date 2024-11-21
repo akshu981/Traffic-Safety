@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Traffic Safety"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Akshayaa Shrestha (as7460)
+    - Rujula Pradeep (rp3248)
+  repo-url: https://github.com/akshu981/Traffic-Safety
   date: today
   page-footer:
     right: |
