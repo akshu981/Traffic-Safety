@@ -2,22 +2,31 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "YOUR PROJECT TITLE",
+    "title": "Traffic Safety",
     "section": "",
-    "text": "1 Introduction"
+    "text": "1 Introduction\nMotor vehicle accidents (falling under unintentional injuries) was the third major factor of death after Cancer and Heart Disease in the United States in 2023. We chose this topic because traffic fatality is one of the most critical issue that needs to be addressed and further researched upon. Although our primary goal is to uncover facts using exploratory data analysis, we also aim to pick a stance and create awareness on the importance of implementing robust traffic safety regulation and policies based on that stance. Some of the keys questions that we want to answer are: 1. How does the number of vehicle crashes change with change in mileage? 2. What percentage of fatalities involved drivers with and without a license?\nSources: https://www.usnews.com/news/healthiest-communities/slideshows/top-10-causes-of-death-in-america?slide=11",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
   },
   {
-    "objectID": "data.html#description",
-    "href": "data.html#description",
+    "objectID": "data.html",
+    "href": "data.html",
     "title": "2  Data",
-    "section": "2.1 Description",
-    "text": "2.1 Description"
+    "section": "",
+    "text": "2.1 Description\nFor this project, we propose to use data from the National Highway Traffic Safety Administration’s (NHTSA) Fatality Analysis Reporting System (FARS), which provides comprehensive information on fatal motor vehicle crashes across the United States. The data are collected by NHTSA in collaboration with state and local law enforcement agencies, and include details on motor vehicle traffic crashes, trafic crash fatalities, and other national statistics. The data is avaiable is txt and xls format, and is updated annually with the latest data being from 2022. There are 19 rows (variables) and 31 columns (years). We plan to import the data into Rstudio using the xls format. The exact dataset used can be accessed at https://www-fars.nhtsa.dot.gov/Main/index.aspx",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
   },
   {
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
     "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis"
+    "text": "2.2 Missing value analysis\nThere are no missing values in the dataset.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
   }
 ]
