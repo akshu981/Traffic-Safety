@@ -3,5 +3,5 @@
 ## Description
 For this project, we propose to use data from the National Highway Traffic Safety Administration's (NHTSA) Fatality Analysis Reporting System (FARS), which provides comprehensive information on fatal motor vehicle crashes across the United States. The data are collected by NHTSA in collaboration with state and local law enforcement agencies, and include details on motor vehicle traffic crashes, trafic crash fatalities, and other national statistics. The data is avaiable is txt and xls format, and is updated annually with the latest data being from 2022. There are 19 rows (variables) and 31 columns (years). We plan to import the data into Rstudio using the xls format. The exact dataset used can be accessed at https://www-fars.nhtsa.dot.gov/Main/index.aspx
 
-## Missing value analysis
+## Missing value analysis 
 There are no missing values in the dataset. 
