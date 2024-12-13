@@ -1,7 +1,56 @@
 # Data
 
 ## Description
-For this project, we propose to use data from the National Highway Traffic Safety Administration's (NHTSA) Fatality Analysis Reporting System (FARS), which provides comprehensive information on fatal motor vehicle crashes across the United States. The data are collected by NHTSA in collaboration with state and local law enforcement agencies, and include details on motor vehicle traffic crashes, trafic crash fatalities, and other national statistics. The data is avaiable is txt and xls format, and is updated annually with the latest data being from 2022. There are 19 rows (variables) and 31 columns (years). We plan to import the data into Rstudio using the xls format. The exact dataset used can be accessed at https://www-fars.nhtsa.dot.gov/Main/index.aspx
+
+For this project, we propose to use data from the National Highway Traffic Safety Administration's (NHTSA) Fatality Analysis Reporting System (FARS), which provides comprehensive information on fatal motor vehicle crashes across the United States. The data are collected by NHTSA in collaboration with state and local law enforcement agencies, and include details on motor vehicle traffic crashes, traffic crash fatalities, and other national statistics. The data is available is txt and xls format, and is updated annually with the latest data being from 2022. There are different sets of data including summary, trends, crashes, vehicles, people, and states. We used the summary dataset which had data for all of United States from 1994 to 2022. There are 19 rows (variables) and 31 columns (years). We plan to import the data into Rstudio using the xls format. The exact dataset used can be accessed and downloaded at https://www-fars.nhtsa.dot.gov/Main/index.aspx. The dataset, cleaned and uncleaned, can also be found in our Data folder. In this folder, we also have a script that can clean the uncleaned dataset.
 
 ## Missing value analysis 
-There are no missing values in the dataset. 
+
+```{r}
+suppressPackageStartupMessages({
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+})
+file_path_new <- "C:/Users/prish/OneDrive/Desktop/EDAV/Traffic-Safety/Data/vehicle_crash_data.csv"
+data <- read.csv(file_path_new)
+
+# Identifing rows with missing data
+rows_with_missing_data <- which(rowSums(is.na(data)) > 0)
+
+missing_data_info <- data.frame(
+  Type = c("Rows with Missing Data", "Complete Rows"),
+  Count = c(length(rows_with_missing_data), nrow(data) - length(rows_with_missing_data))
+)
+
+ggplot(missing_data_info, aes(x = Type, y = Count, fill = Type)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Rows with Missing Data", x = "", y = "Count") +
+  theme_minimal()
+```
+We observe that there are a few rows with missing values. These rows represent subheadings for the rows beneath it. For example, row titled "Vehicle Occupants" comprise Drivers, Passengers, and "Unknown" category. We will delete those rows in the next step of data cleaning process. 
+
+
+```{r}
+# Identifying columns with no data (completely NA)
+columns_with_no_data <- colnames(data)[colSums(is.na(data)) == nrow(data)]
+
+no_data_info <- data.frame(
+  Column = c("Columns with missing data", "Columns with all data"),
+  Count = c(length(columns_with_no_data), ncol(data) - length(columns_with_no_data))
+)
+
+ggplot(no_data_info, aes(x = Column, y = Count, fill = Column)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Columns with Missing Data", x = "", y = "Count") +
+  theme_minimal()
+```
+The graph depicts that no Columns (Years) have missing value in our dataset. 
+
+
+## Data Cleaning: 
+### We cleaned the data using the following steps: 
+1. Switching Years from columns to rows and ordering it in ascending order. 
+2. After switching columns to rows, we removed the columns that had no data and did not add much value, which represented subheadings in our initial dataset.
+3. Removing X prefix in the Year Column. 
+4. We also made sure that the columns had integer and numeric datasets. 

@@ -1,1 +1,32 @@
 # Conclusion
+
+<p style="font-size: 16px;">
+From our data exploration, we found that the number of fatal crashes in the United States has shown variation over the years. For example, there was a drastic dip between 2007 and 2009 with a slow increase after 2014. While factors such as resident population, number of licensed driver, number of registered vehicles, and vehicle miles traveled did show negative correlations with fatal crashes, the correlation was not strong enough to determine any of the factors as the only explanation for the variaton in number of fatal crashes over the years. We also looked into the type of victims in these fatal crashes over the years. Over the years, drivers were constantly the majority of the victims. Passengers fatalities did decreases possibly due to improved safety features in cars. We also found that drivers, in general, are more involved in fatal crashes than passengers. However, on the other hand, motorcyclist fatalities increased which could be due to increase in motorcycle usage. We conclude that since the average number of crashes involving motorcyclists has increased with time, there needs to be stricter implementation of safety measures and regulations surrounding riding motorcycles on highways and roads in the U.S. Further, driving behavior needs to be studied since the average number of fatal crashes involving drivers has roughly remained consistent over the years. 
+</p>
+
+## Future Directions
+
+<p style="font-size: 16px;">
+Our research has led to many new questions...
+</p>
+
+<small>
+Some examples include:
+
+1) What factors can explain the variation in the number of fatal crashes in the United States over the years? Have there been changes in policies, car features, etc.?
+2) Why has fatal motorcycle crashes increased over the years?
+3) What safety measures and regulations for motorcycles can be implemented to decrease the percentage of motorcycle fatal crashes?
+4) Why are drivers involved in more fatal crashes than passengers? Are drivers more likely to drive recklessly alone?
+5) What policies implemented between 1994 and 2022 have worked and which haven’t?
+
+In addition, multicollinearity should be addressed before any model building or training process with this dataset, as there is the possibility of two features being highly correlated with each other. In our case, these were motorcyclists and non-motorcyclists.
+
+<small>
+
+## Limitations
+
+<p style="font-size: 16px;">
+The data covers a good range of details on fatal crashes, but adding more features and depth to our data visualization could help explore the effects of policies more effectively. This could be done by researching what major policy changes occurred between 1994 and 2022. We could also look at state-level data separately to determine whether policy differences between states help identify more effective policies.
+
+In conclusion, our data exploration is a good start to improving road safety policies, but a deeper dive is needed to answer the questions that our research has raised.
+</p>

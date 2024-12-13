@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Traffic Safety",
     "section": "",
-    "text": "1 Introduction\nMotor vehicle accidents (falling under unintentional injuries) was the third major factor of death after Cancer and Heart Disease in the United States in 2023. We chose this topic because traffic fatality is one of the most critical issue that needs to be addressed and further researched upon. Although our primary goal is to uncover facts using exploratory data analysis, we also aim to pick a stance and create awareness on the importance of implementing robust traffic safety regulation and policies based on that stance. Some of the keys questions that we want to answer are: 1. How does the number of vehicle crashes change with change in mileage? 2. What percentage of fatalities involved drivers with and without a license?\nSources: https://www.usnews.com/news/healthiest-communities/slideshows/top-10-causes-of-death-in-america?slide=11",
+    "text": "1 Introduction\nMotor vehicle accidents (falling under unintentional injuries) was the third major factor of death after Cancer and Heart Disease in the United States in 2023. We chose this topic because traffic fatality is one of the most critical issue that needs to be addressed and further researched upon. Although our primary goal is to uncover facts using exploratory data analysis, we also aim to pick a stance and create awareness on the importance of implementing robust traffic safety regulation and policies based on that stance. Some of the keys questions that we want to answer are:\n\nHow has the number of fatal crashes changed over the years?\nWhat type of fatal crashes happen the most?\nWhat factors contribute to the total fatal crashes?\n\nSource",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
@@ -14,7 +14,7 @@
     "href": "data.html",
     "title": "2  Data",
     "section": "",
-    "text": "2.1 Description\nFor this project, we propose to use data from the National Highway Traffic Safety Administration’s (NHTSA) Fatality Analysis Reporting System (FARS), which provides comprehensive information on fatal motor vehicle crashes across the United States. The data are collected by NHTSA in collaboration with state and local law enforcement agencies, and include details on motor vehicle traffic crashes, trafic crash fatalities, and other national statistics. The data is avaiable is txt and xls format, and is updated annually with the latest data being from 2022. There are 19 rows (variables) and 31 columns (years). We plan to import the data into Rstudio using the xls format. The exact dataset used can be accessed at https://www-fars.nhtsa.dot.gov/Main/index.aspx",
+    "text": "2.1 Description\nFor this project, we propose to use data from the National Highway Traffic Safety Administration’s (NHTSA) Fatality Analysis Reporting System (FARS), which provides comprehensive information on fatal motor vehicle crashes across the United States. The data are collected by NHTSA in collaboration with state and local law enforcement agencies, and include details on motor vehicle traffic crashes, traffic crash fatalities, and other national statistics. The data is available is txt and xls format, and is updated annually with the latest data being from 2022. There are different sets of data including summary, trends, crashes, vehicles, people, and states. We used the summary dataset which had data for all of United States from 1994 to 2022. There are 19 rows (variables) and 31 columns (years). We plan to import the data into Rstudio using the xls format. The exact dataset used can be accessed and downloaded at https://www-fars.nhtsa.dot.gov/Main/index.aspx. The dataset, cleaned and uncleaned, can also be found in our Data folder. In this folder, we also have a script that can clean the uncleaned dataset.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]
@@ -24,9 +24,119 @@
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
     "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis\nThere are no missing values in the dataset.",
+    "text": "2.2 Missing value analysis\n\n\nCode\nsuppressPackageStartupMessages({\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(tidyr)\n})\nfile_path_new &lt;- \"C:/Users/prish/OneDrive/Desktop/EDAV/Traffic-Safety/Data/vehicle_crash_data.csv\"\ndata &lt;- read.csv(file_path_new)\n\n# Identifing rows with missing data\nrows_with_missing_data &lt;- which(rowSums(is.na(data)) &gt; 0)\n\nmissing_data_info &lt;- data.frame(\n  Type = c(\"Rows with Missing Data\", \"Complete Rows\"),\n  Count = c(length(rows_with_missing_data), nrow(data) - length(rows_with_missing_data))\n)\n\nggplot(missing_data_info, aes(x = Type, y = Count, fill = Type)) +\n  geom_bar(stat = \"identity\") +\n  labs(title = \"Rows with Missing Data\", x = \"\", y = \"Count\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nWe observe that there are a few rows with missing values. These rows represent subheadings for the rows beneath it. For example, row titled “Vehicle Occupants” comprise Drivers, Passengers, and “Unknown” category. We will delete those rows in the next step of data cleaning process.\n\n\nCode\n# Identifying columns with no data (completely NA)\ncolumns_with_no_data &lt;- colnames(data)[colSums(is.na(data)) == nrow(data)]\n\nno_data_info &lt;- data.frame(\n  Column = c(\"Columns with missing data\", \"Columns with all data\"),\n  Count = c(length(columns_with_no_data), ncol(data) - length(columns_with_no_data))\n)\n\nggplot(no_data_info, aes(x = Column, y = Count, fill = Column)) +\n  geom_bar(stat = \"identity\") +\n  labs(title = \"Columns with Missing Data\", x = \"\", y = \"Count\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nThe graph depicts that no Columns (Years) have missing value in our dataset.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#data-cleaning",
+    "href": "data.html#data-cleaning",
+    "title": "2  Data",
+    "section": "2.3 Data Cleaning:",
+    "text": "2.3 Data Cleaning:\n\n2.3.1 We cleaned the data using the following steps:\n\nSwitching Years from columns to rows and ordering it in ascending order.\nAfter switching columns to rows, we removed the columns that had no data and did not add much value, which represented subheadings in our initial dataset.\nRemoving X prefix in the Year Column.\nWe also made sure that the columns had integer and numeric datasets.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
+    ]
+  },
+  {
+    "objectID": "results.html",
+    "href": "results.html",
+    "title": "3  Results",
+    "section": "",
+    "text": "3.1 Looking at how the number of total fatal crashes as changed over the years…\nCode\nsuppressPackageStartupMessages({\n library(ggplot2)\n  library(corrplot)\n  library(readr)\n  library(dplyr)\n  library(GGally)\n  library(tidyr)\n})\n\ndata &lt;- suppressMessages(read_csv(\"C:/Users/prish/OneDrive/Desktop/EDAV/Traffic-Safety/Data/vehicle_crash_data_cleaned.csv\"))\n\nggplot(data, aes(x = Year, y = `Fatal Crashes` / 1000)) +\n  geom_bar(stat = \"identity\", fill = \"#FFE7C7\") +\n  labs(title = \"Total Fatal Crashes Over the Years\",\n       x = \"Year\", y = \"Total Fatal Crashes (in thousands)\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +\n  scale_x_continuous(breaks = data$Year)\nFrom the above barplot, we see that the number of fatal crashes in the United States has not been constant in the years 1994-2022. Although the number is constant till year 2007. There is a drastic decrease till 2009. Then, once again, the number of fatal crashes is constant till 2014. However, after that, we see an increase in fatal crashes till 2022. In later graphs, we can delve more into finding possible reasons for this decrease and then increase.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#looking-at-the-correlation-relationships-between-fatal-crashes-and-national-statistics",
+    "href": "results.html#looking-at-the-correlation-relationships-between-fatal-crashes-and-national-statistics",
+    "title": "3  Results",
+    "section": "3.2 Looking at the correlation relationships between fatal crashes and national statistics…",
+    "text": "3.2 Looking at the correlation relationships between fatal crashes and national statistics…\n\n\nCode\ncor_data &lt;- data %&gt;%\n  select(`Fatal Crashes`, `Resident Population (Thousands)`, \n         `Licensed Drivers (Thousands)`, `Registered Vehicles (Thousands)`, \n         `Vehicle Miles Traveled (Billions)`)\n\ncor_matrix &lt;- cor(cor_data, use = \"complete.obs\")\n\ncor_long &lt;- as.data.frame(as.table(cor_matrix)) %&gt;%\n  rename(Var1 = Var1, Var2 = Var2, value = Freq)\n\nggplot(cor_long, aes(Var1, Var2, fill = value)) +\n  geom_tile() +\n  geom_text(aes(label = round(value, 2)), size = 4, color = \"black\") +  # Add correlation values\n  scale_fill_gradient2(low = \"lightblue\", high = \"pink\", mid = \"white\", midpoint = 0, \n                       limits = c(-1, 1)) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1),\n        plot.title = element_text(hjust = 0.5)) +\n  labs(title = \"Correlation Heatmap Between Fatal Crashes and National Statistics\", x = \"\", y = \"\") +\n  coord_fixed(ratio = 1)\n\n\n\n\n\n\n\n\n\n\nIn order to identify what factors could be changing the number of fatal crashes, we looked at the correlation between fatal crashes and resident population, number of licensed drivers, number of registered vehicles, and vehicle miles traveled. We found that all these factors are correlated with fatal crashes but negatively correlated. The correlation, however, is not very strong. From the above heatmap, we can see fatal crashes is most correlated with resident population and least correlated with vehicle miles traveled.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#confirming-whether-any-of-the-top-3-most-correlated-factors-could-explain-the-changes-in-total-fatal-crashes-over-the-years",
+    "href": "results.html#confirming-whether-any-of-the-top-3-most-correlated-factors-could-explain-the-changes-in-total-fatal-crashes-over-the-years",
+    "title": "3  Results",
+    "section": "3.3 Confirming whether any of the top 3 most correlated factors could explain the changes in total fatal crashes over the years…",
+    "text": "3.3 Confirming whether any of the top 3 most correlated factors could explain the changes in total fatal crashes over the years…\n\n\nCode\ndata_normalized &lt;- data %&gt;%\n  mutate(across(\n    c(`Fatal Crashes`, `Resident Population (Thousands)`, \n      `Registered Vehicles (Thousands)`, `Licensed Drivers (Thousands)`),\n    ~ (. - min(.)) / (max(.) - min(.)),\n    .names = \"norm_{col}\"\n  ))\n\ndata_long &lt;- data_normalized %&gt;%\n  select(Year, starts_with(\"norm_\")) %&gt;%\n  pivot_longer(cols = -Year, \n               names_to = \"Variable\", \n               values_to = \"Value\") %&gt;%\n  mutate(Variable = recode(Variable,\n                           \"norm_Fatal Crashes\" = \"Fatal Crashes\",\n                           \"norm_Resident Population (Thousands)\" = \"Resident Population\",\n                           \"norm_Registered Vehicles (Thousands)\" = \"Registered Vehicles\",\n                           \"norm_Licensed Drivers (Thousands)\" = \"Licensed Drivers\"))\n\nggplot() +\n  geom_bar(data = filter(data_long, Variable == \"Fatal Crashes\"), \n           aes(x = Year, y = Value), \n           stat = \"identity\", fill = \"#FFE7C7\", alpha = 0.8) +\n  geom_line(data = filter(data_long, Variable != \"Fatal Crashes\"), \n            aes(x = Year, y = Value, color = Variable, group = Variable), size = 1) +\n  geom_point(data = filter(data_long, Variable != \"Fatal Crashes\"), \n             aes(x = Year, y = Value, color = Variable), size = 2) +\n  labs(\n    title = \"Trends in Fatal Crashes and Correlated Variables Over the Years (Normalized)\",\n    x = \"Year\",\n    y = \"Normalized Value\",\n    color = \"Variable\"\n  ) +\n  theme_minimal() +\n  theme(\n    axis.text.x = element_text(angle = 45, hjust = 1),\n    plot.title = element_text(hjust = 0.3)\n  ) +\n  scale_color_manual(values = c(\n    \"Resident Population\" = \"lightgreen\",\n    \"Registered Vehicles\" = \"skyblue\",\n    \"Licensed Drivers\" = \"#6A5ACD\"\n  ))\n\n\n\n\n\n\n\n\n\n\nFrom the above plot, we can see that there is a dip in registered vehicles and resident population where there is a decrease in total fatal crashes. However, the dip is not as drastic as the change in total fatal crashes. Thus, it is hard to confirm whether those variables could be the only reason for the changes in total fatal crashes.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#looking-at-the-distribution-of-type-of-victims-in-fatal-crahses-over-the-years",
+    "href": "results.html#looking-at-the-distribution-of-type-of-victims-in-fatal-crahses-over-the-years",
+    "title": "3  Results",
+    "section": "3.4 Looking at the distribution of type of victims in fatal crahses over the years",
+    "text": "3.4 Looking at the distribution of type of victims in fatal crahses over the years\n\n\nCode\ndata &lt;- data %&gt;%\n  mutate(Unknown = `Unknown` + `Other/ Unknown`) %&gt;%\n  select(-`Other/ Unknown`)  \n\ndata_long &lt;- data %&gt;%\n  select(Year, Drivers, Passengers, Motorcyclists, Pedestrians, Pedalcyclists, Unknown) %&gt;%\n  gather(key = \"Category\", value = \"Count\", -Year)\n\ndata_long &lt;- data_long %&gt;%\n  group_by(Year) %&gt;%\n  mutate(Percent = Count / sum(Count)) %&gt;%\n  ungroup()\n\nggplot(data_long, aes(x = factor(Year), y = Percent, fill = Category)) +\n  geom_bar(stat = \"identity\") +\n  labs(title = \"Fatal Crashes by Type of Victim Over the Years\",\n       x = \"Year\", y = \"Percentage of Total Fatalities\") +\n  scale_fill_manual(values = c(\"Drivers\" = \"lightblue\", \"Passengers\" = \"lightpink\", \n                               \"Motorcyclists\" = \"lightgreen\", \"Pedestrians\" = \"#FFEE8C\",\n                               \"Pedalcyclists\" = \"#CBC3E3\", \"Unknown\" = \"gray\")) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  \n  scale_y_continuous(labels = scales::percent) \n\n\n\n\n\n\n\n\n\n\nFrom the aboved stacked bar plot, we found that the majority of victims in fatal crashes are the drivers. This has stayed pretty constant over the years. On the other hand, the percentage of passengers killed has decreased over the years. This could be the result of improved safety features in cars for passengers. The percentage of motorcyclists has increased over the years. This could be due to a increase in popularity of motorcycles over the years and may call for additional policies or safety features for motorcyclists.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#comparing-number-of-drivers-and-passengers-invovled-in-crashes-over-the-years",
+    "href": "results.html#comparing-number-of-drivers-and-passengers-invovled-in-crashes-over-the-years",
+    "title": "3  Results",
+    "section": "3.5 Comparing number of drivers and passengers invovled in crashes over the years",
+    "text": "3.5 Comparing number of drivers and passengers invovled in crashes over the years\n\n\nCode\ncleaned_file_path &lt;- \"C:/Users/prish/OneDrive/Desktop/EDAV/Traffic-Safety/Data/vehicle_crash_data_cleaned.csv\"\nvehicle_crash_data_cleaned &lt;- read.csv(cleaned_file_path)\n\n# Filtering relevant columns for the plot and arrange data\ndrivers_passengers_data &lt;- vehicle_crash_data_cleaned |&gt;\n  select(Year, Drivers, Passengers) |&gt;\n  arrange(desc(Year)) \n\n# Converting data to long format for ggplot\ndrivers_passengers_long &lt;- drivers_passengers_data |&gt;\n  pivot_longer(\n    cols = c(Drivers, Passengers),\n    names_to = \"Category\",\n    values_to = \"Count\"\n  )\n\n# Creating grouped bar chart\nggplot(drivers_passengers_long, aes(x = as.factor(Year), y = Count/1000, fill = Category)) +\n  geom_bar(stat = \"identity\", position = position_dodge(width = 0.8)) +  # Drivers and Passengers grouped\n  scale_fill_manual(values = c(\"Drivers\" = \"blue\", \"Passengers\" = \"orange\")) + \n  labs(\n    title = \"Comparison of Drivers and Passengers in Fatal Crashes Each Year\",\n    x = \"Year\",\n    y = \"Count (In Thousands)\",\n    fill = \"Category\"\n  ) +\n  theme_minimal() +\n  theme(\n    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),  # Rotating x-axis labels for readability\n    plot.title = element_text(size = 14, face = \"bold\"),\n    panel.grid.major.x = element_blank(), \n    panel.grid.major.y = element_blank()  \n  ) +\n  scale_x_discrete(expand = expansion(mult = c(0.1, 0.1))) +  # Adding gaps between years for readability\n  scale_y_continuous(\n    limits = c(0, 25),\n    breaks = c(5, 10, 15, 20, 25),\n    expand = expansion(mult = c(0, 0.05))\n  )\n\n\n\n\n\n\n\n\n\n\nFrom the above histogram, we observe that the number of both drivers and passengers involved in vehicle crashes follow a similar pattern. From year 2006 upto 2014, the number of drivers and passengers gradually decreases. After 2014, the number of drivers involved in vehicle crashes increases steadily, whereas the number for passengers increases faintly. The data distribution for drivers is bimodal with two peaks corresponding to years 2002 and 2021. For passengers, it is unimodal with roghly positively skewed. Further, there are no significant outliers in the data distribution above. The above graph omits the count of “Unknown” since the count for that category is small compared to passengers and drivers.\nOne more key oberservation is that for all years, the number of drivers involved in vehicle crash is higher than the number of passengers involved in a crash. This poses a possible research question if people are more likely to drive recklessly alone than with passengers in their car.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "results.html#comparing-number-of-motorcyclists-vs-nonmotorists-involved-in-fatal-crashes",
+    "href": "results.html#comparing-number-of-motorcyclists-vs-nonmotorists-involved-in-fatal-crashes",
+    "title": "3  Results",
+    "section": "3.6 Comparing number of motorcyclists vs nonmotorists involved in fatal crashes…",
+    "text": "3.6 Comparing number of motorcyclists vs nonmotorists involved in fatal crashes…\n\n\nCode\n# Selecting relevant columns and arranging data\nmotorcyclists_non_motorists &lt;- vehicle_crash_data_cleaned |&gt;\n  select(Year, Motorcyclists, Sub.Total2) |&gt;\n  rename(NonMotorists = Sub.Total2) |&gt;\n  arrange(Year)\n\n# Converting data to long format for ggplot\nmotorcyclists_long &lt;- motorcyclists_non_motorists |&gt;\n  pivot_longer(\n    cols = c(Motorcyclists, NonMotorists),\n    names_to = \"Category\",\n    values_to = \"Count\"\n  )\n\nggplot(motorcyclists_long, aes(x = Year, y = Count/1000, fill = Category)) +\n  geom_area(alpha = 0.7) +  \n  labs(\n    title = \"Comparison of Motorcyclists vs Non-Motorists in Fatal Crashes\",\n    x = \"Year\",\n    y = \"Count (In Thousands)\",\n    fill = \"Category\"\n  ) +\n  scale_x_continuous(breaks = motorcyclists_long$Year) +  \n  scale_y_continuous(\n    limits = c(0, 20),  \n    breaks = c(5, 10, 15, 20),  \n    #expand = expansion(mult = c(0, 0.05))  \n  ) +\n  theme_minimal() +\n  theme(\n    axis.text.x = element_text(size = 10, angle = 45, hjust = 1),  \n    plot.title = element_text(size = 12, face = \"bold\"),\n    panel.grid.major = element_blank() \n  )\n\n\n\n\n\n\n\n\n\n\nFrom the above chart, we can see that the number of both non-motorists (pedestrians and pedalcyclists) and motorists increases roughly with the same rate with year. This denotes the possibility of multicollinearity, where any two variables in a dataset are highly correlated with each other. Therefore, this information can be taken into account for predictive analytics, machine learning or model training work in the future.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "d3graph.html",
+    "href": "d3graph.html",
+    "title": "4  Interactive Graph",
+    "section": "",
+    "text": "Welcome to the interactive graph! This tool allows you to find the exact number of fatal crashes at each year by clicking on the points. You can also calculate the percent change in fatal crashes between two years. To use it, enter a year in each input box and press the “Calculate Percent Change” button.\n\n\nInstructions:\n\n\n\nEnter the year for “Year 1” and “Year 2”. These should be between 1994 and 2022.\n\n\nClick the “Calculate Percent Change” button to see the change in the number of fatal crashes between the two years.\n\n\nThe result will display the percentage change (increase or decrease) based on the years you entered.\n\n\n\nExample: If you enter 1995 and 2020, the calculator will show the change in fatal crashes between these two years.\n\nEnter Year 1:   Enter Year 2:   Calculate Percent Change",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactive Graph</span>"
+    ]
+  },
+  {
+    "objectID": "conclusion.html",
+    "href": "conclusion.html",
+    "title": "5  Conclusion",
+    "section": "",
+    "text": "5.1 Future Directions\nOur research has led to many new questions…\nSome examples include:",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "conclusion.html#future-directions",
+    "href": "conclusion.html#future-directions",
+    "title": "5  Conclusion",
+    "section": "",
+    "text": "What factors can explain the variation in the number of fatal crashes in the United States over the years? Have there been changes in policies, car features, etc.?\nWhy has fatal motorcycle crashes increased over the years?\nWhat safety measures and regulations for motorcycles can be implemented to decrease the percentage of motorcycle fatal crashes?\nWhy are drivers involved in more fatal crashes than passengers? Are drivers more likely to drive recklessly alone?\nWhat policies implemented between 1994 and 2022 have worked and which haven’t?\n\nIn addition, multicollinearity should be addressed before any model building or training process with this dataset, as there is the possibility of two features being highly correlated with each other. In our case, these were motorcyclists and non-motorcyclists.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
+    ]
+  },
+  {
+    "objectID": "conclusion.html#limitations",
+    "href": "conclusion.html#limitations",
+    "title": "5  Conclusion",
+    "section": "5.2 Limitations",
+    "text": "5.2 Limitations\n\nThe data covers a good range of details on fatal crashes, but adding more features and depth to our data visualization could help explore the effects of policies more effectively. This could be done by researching what major policy changes occurred between 1994 and 2022. We could also look at state-level data separately to determine whether policy differences between states help identify more effective policies.\nIn conclusion, our data exploration is a good start to improving road safety policies, but a deeper dive is needed to answer the questions that our research has raised.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Conclusion</span>"
     ]
   }
 ]

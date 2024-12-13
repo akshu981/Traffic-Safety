@@ -1,12 +1,27 @@
-# Interactive graph
+# Interactive Graph
 
-<style>
-  * {
-    font-family: sans-serif;
-  }
-</style> 
+<p>Welcome to the interactive graph! This tool allows you to find the exact number of fatal crashes at each year by clicking on the points. You can also calculate the percent change in fatal crashes between two years. To use it, enter a year in each input box and press the "Calculate Percent Change" button.</p>
 
-<div id="plot">
+<p><strong>Instructions:</strong></p>
+<ul>
+  <li>Enter the year for "Year 1" and "Year 2". These should be between 1994 and 2022.</li>
+  <li>Click the "Calculate Percent Change" button to see the change in the number of fatal crashes between the two years.</li>
+  <li>The result will display the percentage change (increase or decrease) based on the years you entered.</li>
+</ul>
+
+<p>Example: If you enter 1995 and 2020, the calculator will show the change in fatal crashes between these two years.</p>
+
+<label for="year1">Enter Year 1:</label>
+<input type="number" id="year1" placeholder="e.g., 1995">
+<br>
+<label for="year2">Enter Year 2:</label>
+<input type="number" id="year2" placeholder="e.g., 2020">
+<br>
+<button id="calculate">Calculate Percent Change</button>
+
+<div id="result"></div>
+
+<div id="plot" style="padding-left: 30px;">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
